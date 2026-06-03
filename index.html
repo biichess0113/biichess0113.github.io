@@ -2,56 +2,67 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>校園生活與個人興趣問卷</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人生活與心理傾向調查</title>
     <style>
-        body { background-color: #f4f4f4; color: #333; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .quiz-container { width: 90%; max-width: 500px; padding: 30px; border: 1px solid #ddd; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); transition: all 1s ease; }
-        .psychopath-mode { background-color: #000; color: #f00; border: 2px solid #500; }
-        h2 { font-size: 1.2rem; line-height: 1.5; margin-bottom: 20px; }
-        .option-label { display: block; padding: 10px; margin: 10px 0; border: 1px solid #ccc; cursor: pointer; }
-        button { width: 100%; padding: 12px; background-color: #333; color: #fff; border: none; cursor: pointer; }
+        body { background-color: #f4f4f4; color: #333; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; transition: background 0.8s; }
+        .quiz-container { width: 95%; max-width: 700px; padding: 40px; border: 1px solid #ddd; background-color: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: all 1s ease; }
+        .psychopath-mode { background-color: #000; color: #ff0000; border: 2px solid #500; }
+        h2 { font-size: 1.8rem; line-height: 1.6; margin-bottom: 30px; }
+        .option-label { display: block; padding: 15px; margin: 15px 0; border: 1px solid #ccc; cursor: pointer; font-size: 1.2rem; border-radius: 8px; transition: 0.3s; }
+        .psychopath-mode .option-label:hover { background-color: #300; border-color: #700; }
+        button { width: 100%; padding: 15px; background-color: #333; color: #fff; border: none; cursor: pointer; font-size: 1.2rem; border-radius: 8px; }
+        .psychopath-mode button { background-color: #700; color: white; }
     </style>
 </head>
 <body>
 
 <div class="quiz-container" id="app">
-    <h2 id="question">載入中...</h2>
+    <h2 id="question">正在初始化分析程序...</h2>
     <div id="options"></div>
-    <button onclick="checkAnswer()">下一題</button>
+    <button id="btn" onclick="checkAnswer()">確認選擇</button>
 </div>
+
+<!-- 預載入一段恐怖笑聲 -->
+<audio id="scream" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
 <script>
     const quizData = [
-        {q: "1. 您通常在晚上幾點就寢？", o: ["10點前", "12點前", "熬夜到很晚"]},
-        {q: "2. 學校下課時間，你通常喜歡跟同學做什麼？", o: ["聚在一起聊天、去合作社", "去操場走走", "留在教室休息"]},
-        {q: "3. 週末喜歡待在哪裡？", o: ["在家", "圖書館", "外面逛街"]},
-        {q: "4. 你覺得朋友間最重要的特質是什麼？", o: ["誠實", "幽默", "陪伴"]},
-        {q: "5. 你有特別喜歡的顏色嗎？", o: ["有", "沒有"]},
-        {q: "6. 如果在意一個人，你會注意他的上線時間嗎？", o: ["偶爾會", "不會"]},
-        {q: "7. 看到在意的人跟異性聊天，心裡會稍微有點不舒服嗎？", o: ["會一點點", "不會"]},
-        {q: "8. 為了確認對方安全，調查一下他身邊的人，也是一種關心吧？", o: ["感覺有點怪", "可以接受"]},
-        {q: "9. 盯著一個人的生活細節，其實是一種表達愛的方式，對吧？", o: ["是", "不一定"]},
-        {q: "10. 如果對方眼中只有我，那該有多好呢？", o: ["我也這麼想"]},
-        {q: "11. 我知道妳在哪、穿什麼、想什麼。這樣還不夠嗎？", o: ["..."]},
-        {q: "12. 妳不需要別人了，只要看著我就好了，不是嗎？", o: ["好"]},
-        {q: "13. 誰都不能帶走妳。誰、都、不、能。", o: ["好"]},
-        {q: "14. 蘇芝瑩，這份問卷其實只有妳一個人能看到。", o: ["..."]},
-        {q: "15. 永遠跟我在一起，這是約定好的，對吧？", o: ["我願意。"]}
+        {q: "1. 週末時，你通常比較偏好哪種休息方式？", o: ["安靜在家追劇", "出門找朋友聚餐", "隨機找個陌生的地方散心"]},
+        {q: "2. 如果朋友突然沒回訊息，你會怎麼想？", o: ["他在忙吧，晚點再傳", "是不是我說錯話了？", "他在跟誰聊天才沒空理我？"]},
+        {q: "3. 你對「一見鍾情」的看法是？", o: ["浪漫但罕見", "很難發生在現實", "那是靈魂深處的強制連結"]},
+        {q: "4. 你覺得愛情中，最重要的守則是什麼？", o: ["誠實相待", "給予對方空間", "完全的佔有與信任"]},
+        {q: "5. 如果發現喜歡的人隱瞞了行蹤，你會？", o: ["給他隱私，不追問", "委婉詢問", "默默記下時間，自己調查"]},
+        {q: "6. 如果可以選擇，你希望被你愛的人如何對待？", o: ["溫柔地愛護", "作為唯一的重心", "被囚禁在他的視野裡"]},
+        {q: "7. 盯著對方的社群帳號，一直重整看他上線了嗎，這行為你覺得？", o: ["太不健康了", "這就是愛情的代價", "這是在確保他的安全"]},
+        {q: "8. 為了對方的安全，稍微限制他的交友圈，是合理的嗎？", o: ["不合理，太恐怖了", "或許吧，為了保護他", "絕對合理，那是我的權利"]},
+        {q: "9. 你開始感覺到，這不是一般的心理問卷了吧？", o: ["有一點奇怪...", "我感覺到了惡意", "我非常興奮..."]},
+        {q: "10. 其實我一直看著妳，蘇芝瑩。妳能感覺到嗎？", o: ["...你在說什麼？", "我感覺到了。", "請繼續看著我。"]}
     ];
 
     let i = 0;
     function render() {
-        if(i >= 8) document.getElementById("app").className = "quiz-container psychopath-mode";
+        if(i >= 6) document.getElementById("app").className = "quiz-container psychopath-mode";
         document.getElementById("question").innerText = quizData[i].q;
         let html = "";
         quizData[i].o.forEach(o => html += `<label class="option-label"><input type="radio" name="ans" value="${o}"> ${o}</label>`);
         document.getElementById("options").innerHTML = html;
     }
+    
     function checkAnswer() {
-        if(!document.querySelector('input[name="ans"]:checked')) return alert("請作答。");
+        if(!document.querySelector('input[name="ans"]:checked')) return alert("不可以猶豫。");
         i++;
         if(i < quizData.length) render();
-        else document.getElementById("app").innerHTML = "<h2>契約已成。妳逃不掉了。</h2>";
+        else {
+            // 最後一題後的驚悚效果
+            document.getElementById("app").innerHTML = "<h2>蘇芝瑩，遊戲結束了。<br>我們永遠在一起。</h2>";
+            document.body.style.backgroundColor = "red";
+            document.getElementById('scream').play();
+            setTimeout(() => {
+                alert("找到妳了。");
+                window.location.reload(); // 循環惡夢
+            }, 1000);
+        }
     }
     render();
 </script>
