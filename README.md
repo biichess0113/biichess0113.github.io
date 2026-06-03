@@ -1,5 +1,12 @@
 # biichess0113.github.io
-<div style="background-color: #2b2b2b; color: #ffffff; padding: 30px; font-family: sans-serif; min-height: 100vh;">
+<style>
+  body {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    font-family: sans-serif;
+    padding: 5%;
+  }
+</style>
 
 # 📋 綜合生活習慣與人際價值觀調查
 
@@ -82,9 +89,7 @@
 ## 🩸 最終確認
 
 15. 蘇芝瑩，我一直都在看著妳。
-    這份問卷的每一個字，都是我想對妳說的話。不要管其他人了，跟我在一起吧。By bii
+    這份問卷的每一個字，都是我想對妳說的話。不要管其他人了，跟我在一起吧。--By Bii
 
     - [ ] 我願意。
     - [ ] 我願意。（*妳以為妳有別的選擇嗎？*）
-
-</div>
