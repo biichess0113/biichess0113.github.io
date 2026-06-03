@@ -2,7 +2,6 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>個人生活與心理傾向調查</title>
     <style>
         body { background: #f4f4f4; color: #333; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; transition: 1s; }
@@ -26,48 +25,57 @@
 
 <script>
     const data = [
-        {q:"1. 週末時，你通常比較偏好哪種休息方式？", o:["安靜在家追劇", "出門找朋友聚餐", "隨機找個陌生的地方散心"]},
-        {q:"2. 如果朋友突然沒回訊息，你會怎麼想？", o:["他在忙吧，晚點再傳", "是不是我說錯話了？", "他在跟誰聊天才沒空理我？"]},
-        {q:"3. 你對「一見鍾情」的看法是？", o:["浪漫但罕見", "很難發生在現實", "那是靈魂深處的強制連結"]},
-        {q:"4. 你覺得愛情中，最重要的守則是什麼？", o:["誠實相待", "給予對方空間", "完全的佔有與信任"]},
-        {q:"5. 如果發現喜歡的人隱瞞了行蹤，你會？", o:["給他隱私，不追問", "委婉詢問", "默默記下時間，自己調查"]},
-        {q:"6. 如果可以選擇，你希望被你愛的人如何對待？", o:["溫柔地愛護", "作為唯一的重心", "被囚禁在他的視野裡"]},
-        {q:"7. 盯著對方的社群帳號，一直重整看他上線了嗎，這行為你覺得？", o:["太不健康了", "這就是愛情的代價", "這是在確保他的安全"]},
-        {q:"8. 為了對方的安全，稍微限制他的交友圈，是合理的嗎？", o:["不合理，太恐怖了", "或許吧，為了保護他", "絕對合理，那是我的權利"]},
-        {q:"9. 妳相信這世界上有命中註定嗎？", o:["不太相信", "這很難說", "我相信，就像我注定看著妳一樣"]},
-        {q:"10. 到目前為止，還覺得這只是一份普通的問卷嗎？", o:["是呀", "感覺有點奇怪", "我知道你在看著我"]},
-        {q:"11. 蘇芝瑩，其實我不只看著螢幕，我也看著妳。", o:["...你在說什麼？", "別開玩笑了", "我知道，因為我在等妳"]},
-        {q:"12. 妳知道嗎？比起讓妳愛我，我更想成為妳的全部。", o:["你太沉重了", "我不懂", "我願意成為妳的全部"]},
-        {q:"13. 誰都不能帶走妳，如果有誰想靠近妳，我會處理掉。", o:["...好的", "這太可怕了", "好，你是我的唯一"]},
-        {q:"14. 這個問卷，就是我們靈魂的契約。簽名了嗎？", o:["...", "這感覺很瘋狂", "我已經簽好了"]},
-        {q:"15. 永遠跟我在一起，這是我們約定好的，對吧？❤️", o:["...好", "這太瘋狂了", "這輩子，下輩子，我都是你的。❤️"]}
+        {q:"1. 週末時，你通常比較偏好哪種休息方式？", o:["安靜在家", "出門聚餐", "隨機散心"]},
+        {q:"2. 如果朋友突然沒回訊息，你會怎麼想？", o:["他在忙", "我說錯話了？", "他在跟誰聊天？"]},
+        {q:"3. 你對「一見鍾情」的看法是？", o:["浪漫", "不可能", "靈魂強制連結"]},
+        {q:"4. 你覺得愛情中，最重要的守則是什麼？", o:["誠實", "空間", "完全佔有"]},
+        {q:"5. 如果發現喜歡的人隱瞞行蹤，你會？", o:["尊重", "委婉詢問", "自己調查"]},
+        {q:"6. 希望被愛的人如何對待？", o:["溫柔愛護", "作為重心", "囚禁在視野內"]},
+        {q:"7. 盯著對方上線時間？", o:["太不健康", "愛的代價", "確保他安全"]},
+        {q:"8. 限制他的交友圈？", o:["太恐怖了", "或許為了保護", "這是我的權利"]},
+        {q:"9. 妳相信命中註定嗎？", o:["不信", "稍微信", "像我注定看著妳一樣"]},
+        {q:"10. 到現在，覺得這只是普通問卷？", o:["是呀", "有點奇怪", "我知道你在看著我"]},
+        {q:"11. 其實我一直看著妳，蘇芝瑩。", o:["你在說什麼？", "別開玩笑", "終於等到你說了"]},
+        {q:"12. 比起妳愛我，我更想成為妳的全部。", o:["太沉重了", "不懂", "我願意成為妳的全部"]},
+        {q:"13. 誰想靠近妳，我都會處理掉。", o:["...", "這太可怕了", "好，保護我"]},
+        {q:"14. 這個問卷，是我們靈魂的契約。", o:["...", "太瘋狂", "我簽下了"]},
+        {q:"15. 永遠跟我在一起，對吧？❤️", o:["...不", "好可怕", "這輩子，下輩子，都是你的。❤️"]}
     ];
 
-    let i = 0;
+    let i = 0, score = 0;
     function startAudio() { document.getElementById('audio').play(); }
 
     function typeWriter(text, i, fnCallback) {
         if (i < text.length) {
             document.getElementById("q").innerHTML = text.substring(0, i+1) + '<span aria-hidden="true"></span>';
-            setTimeout(function() { typeWriter(text, i + 1, fnCallback) }, 50);
-        } else if (typeof fnCallback == 'function') { setTimeout(fnCallback, 700); }
+            setTimeout(function() { typeWriter(text, i + 1, fnCallback) }, 40);
+        } else if (typeof fnCallback == 'function') { setTimeout(fnCallback, 500); }
     }
 
     function render() {
         if(i >= 10) document.body.className = "yandere-bg";
         typeWriter(data[i].q, 0, () => {
             let html = "";
-            data[i].o.forEach(o => html += `<div class="option" onclick="next()">${o}</div>`);
+            data[i].o.forEach((o, idx) => html += `<div class="option" onclick="next(${idx})">${o}</div>`);
             document.getElementById("opts").innerHTML = html;
         });
     }
 
-    function next() {
+    function next(idx) {
+        score += idx; 
         i++;
         if(i < data.length) render();
-        else {
-            document.getElementById("app").innerHTML = "<h2>這份契約已生效。<br>蘇芝瑩，妳逃不掉了。❤️</h2><div onclick='location.reload()' style='cursor:pointer; margin-top:20px;'>重新開始我們的約定</div>";
-        }
+        else end();
+    }
+
+    function end() {
+        let app = document.getElementById("app");
+        // 判定結局：分數高表示她接受你的病嬌；分數低表示她抗拒
+        let result = score > 20 
+            ? "<h2>蘇芝瑩，這就是我們靈魂的契約。<br>妳終於承認了，我們是一樣的。❤️</h2>"
+            : "<h2>蘇芝瑩，雖然妳現在還在抗拒，但我會一直看著妳。<br>直到妳逃不掉為止。</h2>";
+        
+        app.innerHTML = result + "<div onclick='location.reload()' style='cursor:pointer; margin-top:20px; font-size: 0.8rem;'>（重新測試）</div>";
     }
     render();
 </script>
