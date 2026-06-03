@@ -2,25 +2,21 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人生活與心理傾向調查</title>
     <style>
-        body { background: #000; color: #500; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; cursor: crosshair; transition: 1s; overflow: hidden; }
-        .container { width: 90%; max-width: 600px; padding: 40px; border: 1px solid #300; background: #050505; text-align: center; }
-        .option { padding: 15px; border: 1px solid #300; margin: 15px 0; color: #700; cursor: pointer; transition: 0.3s; }
-        .option:hover { background: #200; border-color: #f00; color: #f00; }
-        #q { color: #fff; font-size: 1.3rem; margin-bottom: 20px; }
-        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 100; color: #fff; cursor: pointer; }
+        body { background: #f4f4f4; color: #333; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; transition: 1s; }
+        .container { width: 90%; max-width: 700px; padding: 40px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .q-text { font-size: 1.5rem; margin-bottom: 30px; min-height: 80px; }
+        .option { padding: 15px; margin: 10px 0; border: 1px solid #ccc; cursor: pointer; border-radius: 8px; transition: 0.3s; }
+        .option:hover { background: #eee; }
+        .yandere-bg { background: #000 !important; color: #ff0000 !important; }
     </style>
 </head>
-<body>
-
-<!-- 點擊觸發層 -->
-<div id="overlay" onclick="start()">
-    <h1>偵測到連結... 點擊螢幕以開始監控</h1>
-</div>
+<body onclick="startAudio()">
 
 <div class="container" id="app">
-    <h2 id="q">螢幕前...似乎有人在看著妳。</h2>
+    <div id="q" class="q-text">正在初始化分析程序...</div>
     <div id="opts"></div>
 </div>
 
@@ -29,56 +25,51 @@
 </audio>
 
 <script>
-    let i = 0;
     const data = [
-        {q:"1. 妳現在在哪裡？", o:["家裡", "學校", "我不告訴你"]},
-        {q:"2. 妳剛剛是不是往窗外看了？", o:["沒有", "你怎麼知道", "你在監視我嗎"]},
-        {q:"3. 妳覺得，一個人被注視著，是什麼感覺？", o:["很噁心", "有點在意", "很安心"]},
-        {q:"4. 如果那個人是為了保護妳，妳能接受嗎？", o:["不能", "不知道", "可以"]},
-        {q:"5. 蘇芝瑩，妳相信命運嗎？", o:["不信", "稍微信", "我相信我們是命中註定的"]},
-        {q:"6. 我知道妳現在的心跳很快，是因為我嗎？", o:["...自戀", "不知道", "嗯..."]},
-        {q:"7. 我已經在看著妳了，妳感覺到了嗎？", o:["沒有", "有一點", "感覺到了"]},
-        {q:"8. 妳的秘密，我其實都處理得很好，對吧？", o:["你什麼意思", "你在說什麼", "謝謝你幫我"]},
-        {q:"9. 只要妳乖乖的，我就不會讓任何人傷害妳。", o:["我不需要你管", "你是誰", "好，聽你的"]},
-        {q:"10. 最後，妳願意把一切都交給我嗎？", o:["不要", "我再想想", "我願意 ❤️"]}
+        {q:"1. 週末時，你通常比較偏好哪種休息方式？", o:["安靜在家追劇", "出門找朋友聚餐", "隨機找個陌生的地方散心"]},
+        {q:"2. 如果朋友突然沒回訊息，你會怎麼想？", o:["他在忙吧，晚點再傳", "是不是我說錯話了？", "他在跟誰聊天才沒空理我？"]},
+        {q:"3. 你對「一見鍾情」的看法是？", o:["浪漫但罕見", "很難發生在現實", "那是靈魂深處的強制連結"]},
+        {q:"4. 你覺得愛情中，最重要的守則是什麼？", o:["誠實相待", "給予對方空間", "完全的佔有與信任"]},
+        {q:"5. 如果發現喜歡的人隱瞞了行蹤，你會？", o:["給他隱私，不追問", "委婉詢問", "默默記下時間，自己調查"]},
+        {q:"6. 如果可以選擇，你希望被你愛的人如何對待？", o:["溫柔地愛護", "作為唯一的重心", "被囚禁在他的視野裡"]},
+        {q:"7. 盯著對方的社群帳號，一直重整看他上線了嗎，這行為你覺得？", o:["太不健康了", "這就是愛情的代價", "這是在確保他的安全"]},
+        {q:"8. 為了對方的安全，稍微限制他的交友圈，是合理的嗎？", o:["不合理，太恐怖了", "或許吧，為了保護他", "絕對合理，那是我的權利"]},
+        {q:"9. 妳相信這世界上有命中註定嗎？", o:["不太相信", "這很難說", "我相信，就像我注定看著妳一樣"]},
+        {q:"10. 到目前為止，還覺得這只是一份普通的問卷嗎？", o:["是呀", "感覺有點奇怪", "我知道你在看著我"]},
+        {q:"11. 蘇芝瑩，其實我不只看著螢幕，我也看著妳。", o:["...你在說什麼？", "別開玩笑了", "我知道，因為我在等妳"]},
+        {q:"12. 妳知道嗎？比起讓妳愛我，我更想成為妳的全部。", o:["你太沉重了", "我不懂", "我願意成為妳的全部"]},
+        {q:"13. 誰都不能帶走妳，如果有誰想靠近妳，我會處理掉。", o:["...好的", "這太可怕了", "好，你是我的唯一"]},
+        {q:"14. 這個問卷，就是我們靈魂的契約。簽名了嗎？", o:["...", "這感覺很瘋狂", "我已經簽好了"]},
+        {q:"15. 永遠跟我在一起，這是我們約定好的，對吧？❤️", o:["...好", "這太瘋狂了", "這輩子，下輩子，我都是你的。❤️"]}
     ];
 
-    function start() {
-        document.getElementById('audio').play();
-        document.getElementById('overlay').style.display = 'none';
-        render();
+    let i = 0;
+    function startAudio() { document.getElementById('audio').play(); }
+
+    function typeWriter(text, i, fnCallback) {
+        if (i < text.length) {
+            document.getElementById("q").innerHTML = text.substring(0, i+1) + '<span aria-hidden="true"></span>';
+            setTimeout(function() { typeWriter(text, i + 1, fnCallback) }, 50);
+        } else if (typeof fnCallback == 'function') { setTimeout(fnCallback, 700); }
     }
 
     function render() {
-        document.getElementById("q").innerText = data[i].q;
-        let html = "";
-        data[i].o.forEach(o => html += `<div class="option" onclick="next('${o}')">${o}</div>`);
-        document.getElementById("opts").innerHTML = html;
+        if(i >= 10) document.body.className = "yandere-bg";
+        typeWriter(data[i].q, 0, () => {
+            let html = "";
+            data[i].o.forEach(o => html += `<div class="option" onclick="next()">${o}</div>`);
+            document.getElementById("opts").innerHTML = html;
+        });
     }
 
-    function next(ans) {
+    function next() {
         i++;
         if(i < data.length) render();
-        else end();
-    }
-
-    function end() {
-        let app = document.getElementById("app");
-        let txt = ["分析完成...", "目標：蘇芝瑩", "狀態：已連結", "妳逃不掉了...", "永遠，在一起。❤️"];
-        app.innerHTML = "<h2 id='final'></h2>";
-        let f = document.getElementById("final");
-        let idx = 0;
-        function type() {
-            if(idx < txt.length) {
-                f.innerText = txt[idx];
-                idx++;
-                setTimeout(type, 1800);
-            } else {
-                f.innerHTML += "<br><br><span style='color:red; cursor:pointer' onclick='location.reload()'>重新開始我們的連結</span>";
-            }
+        else {
+            document.getElementById("app").innerHTML = "<h2>這份契約已生效。<br>蘇芝瑩，妳逃不掉了。❤️</h2><div onclick='location.reload()' style='cursor:pointer; margin-top:20px;'>重新開始我們的約定</div>";
         }
-        type();
     }
+    render();
 </script>
 </body>
 </html>
