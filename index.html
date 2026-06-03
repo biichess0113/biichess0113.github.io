@@ -3,66 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人生活與心理傾向調查</title>
+    <title>心理深度分析</title>
     <style>
-        body { background-color: #f4f4f4; color: #333; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; transition: background 0.8s; }
-        .quiz-container { width: 95%; max-width: 700px; padding: 40px; border: 1px solid #ddd; background-color: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: all 1s ease; }
-        .psychopath-mode { background-color: #000; color: #ff0000; border: 2px solid #500; }
-        h2 { font-size: 1.8rem; line-height: 1.6; margin-bottom: 30px; }
-        .option-label { display: block; padding: 15px; margin: 15px 0; border: 1px solid #ccc; cursor: pointer; font-size: 1.2rem; border-radius: 8px; transition: 0.3s; }
-        .psychopath-mode .option-label:hover { background-color: #300; border-color: #700; }
-        button { width: 100%; padding: 15px; background-color: #333; color: #fff; border: none; cursor: pointer; font-size: 1.2rem; border-radius: 8px; }
-        .psychopath-mode button { background-color: #700; color: white; }
+        body { background-color: #0d0d0d; color: #aaa; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; transition: background 1s; }
+        .container { width: 90%; max-width: 600px; padding: 30px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px; }
+        #progress { width: 100%; height: 5px; background: #333; margin-bottom: 20px; }
+        #bar { height: 100%; background: #555; width: 0%; transition: 0.5s; }
+        h2 { font-size: 1.5rem; margin-bottom: 25px; }
+        .option { display: block; padding: 15px; margin: 10px 0; border: 1px solid #444; cursor: pointer; color: #eee; }
+        .option:hover { background: #333; }
+        .yandere { border-color: #800; color: #f00; }
     </style>
 </head>
 <body>
 
-<div class="quiz-container" id="app">
-    <h2 id="question">正在初始化分析程序...</h2>
-    <div id="options"></div>
-    <button id="btn" onclick="checkAnswer()">確認選擇</button>
+<div class="container" id="app">
+    <div id="progress"><div id="bar"></div></div>
+    <h2 id="q">正在連結至您的生活...</h2>
+    <div id="opts"></div>
 </div>
 
-<!-- 預載入一段恐怖笑聲 -->
-<audio id="scream" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-
 <script>
-    const quizData = [
-        {q: "1. 週末時，你通常比較偏好哪種休息方式？", o: ["安靜在家追劇", "出門找朋友聚餐", "隨機找個陌生的地方散心"]},
-        {q: "2. 如果朋友突然沒回訊息，你會怎麼想？", o: ["他在忙吧，晚點再傳", "是不是我說錯話了？", "他在跟誰聊天才沒空理我？"]},
-        {q: "3. 你對「一見鍾情」的看法是？", o: ["浪漫但罕見", "很難發生在現實", "那是靈魂深處的強制連結"]},
-        {q: "4. 你覺得愛情中，最重要的守則是什麼？", o: ["誠實相待", "給予對方空間", "完全的佔有與信任"]},
-        {q: "5. 如果發現喜歡的人隱瞞了行蹤，你會？", o: ["給他隱私，不追問", "委婉詢問", "默默記下時間，自己調查"]},
-        {q: "6. 如果可以選擇，你希望被你愛的人如何對待？", o: ["溫柔地愛護", "作為唯一的重心", "被囚禁在他的視野裡"]},
-        {q: "7. 盯著對方的社群帳號，一直重整看他上線了嗎，這行為你覺得？", o: ["太不健康了", "這就是愛情的代價", "這是在確保他的安全"]},
-        {q: "8. 為了對方的安全，稍微限制他的交友圈，是合理的嗎？", o: ["不合理，太恐怖了", "或許吧，為了保護他", "絕對合理，那是我的權利"]},
-        {q: "9. 你開始感覺到，這不是一般的心理問卷了吧？", o: ["有一點奇怪...", "我感覺到了惡意", "我非常興奮..."]},
-        {q: "10. 其實我一直看著妳，蘇芝瑩。妳能感覺到嗎？", o: ["...你在說什麼？", "我感覺到了。", "請繼續看著我。"]}
+    const data = [
+        {q:"1. 您通常在晚上幾點就寢？", o:["10點前", "12點前", "熬夜到很晚"]},
+        {q:"2. 下課時你喜歡做什麼？", o:["聊天", "去操場", "留在位子上觀察周圍"]},
+        {q:"3. 週末喜歡在哪？", o:["在家", "圖書館", "外面逛街"]},
+        {q:"4. 朋友間最重要的特質？", o:["誠實", "幽默", "陪伴"]},
+        {q:"5. 有特別喜歡的顏色嗎？", o:["藍色", "白色", "紅色"]},
+        {q:"6. 在意一個人時，會注意他上線時間嗎？", o:["偶爾", "不會", "我會隨時盯著"]},
+        {q:"7. 看到在意的人跟異性聊天？", o:["沒感覺", "有一點點", "心裡非常不舒服"]},
+        {q:"8. 為了確認安全，調查他身邊的人？", o:["怪怪的", "可以接受", "是合理的關心"]},
+        {q:"9. 盯著一個人的細節，是愛的方式吧？", o:["不一定", "是", "這是唯一的愛"]},
+        {q:"10. 如果對方眼中只有我？", o:["我也這麼想", "很浪漫", "這是必須的"]},
+        {q:"11. 我知道妳在哪、穿什麼、想什麼。夠了嗎？", o:["...", "你在說什麼", "不夠，還要更多"]},
+        {q:"12. 妳不需要別人了，只要看著我就好了，對吧？", o:["好", "不要", "只能是我"]},
+        {q:"13. 誰都不能帶走妳，誰都不能。", o:["...好的", "你很奇怪", "永遠在一起"]},
+        {q:"14. 蘇芝瑩，這份問卷只有妳一個人能看到。", o:["...", "為什麼是我", "我知道，因為你一直看著我"]},
+        {q:"15. 永遠跟我在一起，這是約定好的，對吧？", o:["...好", "不要", "這輩子，下輩子，都是我的"]}
     ];
 
-    let i = 0;
+    let i = 0, score = 0;
     function render() {
-        if(i >= 6) document.getElementById("app").className = "quiz-container psychopath-mode";
-        document.getElementById("question").innerText = quizData[i].q;
+        document.getElementById("bar").style.width = (i / 15 * 100) + "%";
+        document.getElementById("q").innerText = data[i].q;
         let html = "";
-        quizData[i].o.forEach(o => html += `<label class="option-label"><input type="radio" name="ans" value="${o}"> ${o}</label>`);
-        document.getElementById("options").innerHTML = html;
+        data[i].o.forEach((o, index) => {
+            html += `<div class="option ${index === 2 ? 'yandere' : ''}" onclick="next(${index})">${o}</div>`;
+        });
+        document.getElementById("opts").innerHTML = html;
     }
-    
-    function checkAnswer() {
-        if(!document.querySelector('input[name="ans"]:checked')) return alert("不可以猶豫。");
+
+    function next(idx) {
+        score += idx; 
         i++;
-        if(i < quizData.length) render();
-        else {
-            // 最後一題後的驚悚效果
-            document.getElementById("app").innerHTML = "<h2>蘇芝瑩，遊戲結束了。<br>我們永遠在一起。</h2>";
-            document.body.style.backgroundColor = "red";
-            document.getElementById('scream').play();
-            setTimeout(() => {
-                alert("找到妳了。");
-                window.location.reload(); // 循環惡夢
-            }, 1000);
-        }
+        if(i < 15) render();
+        else end();
+    }
+
+    function end() {
+        let msg = score > 20 ? "<h2>蘇芝瑩，妳跟我是一樣的。我也愛妳，瘋狂地愛著妳。</h2>" : "<h2>蘇芝瑩，雖然妳不懂我，但我會讓妳慢慢了解的。</h2>";
+        document.getElementById("app").innerHTML = msg + "<p>契約已成。</p>";
+        document.body.style.background = score > 20 ? "#200" : "#111";
     }
     render();
 </script>
