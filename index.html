@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>校園生活與個人興趣問卷</title>
+    <style>
+        body { background-color: #f4f4f4; color: #333; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .quiz-container { width: 90%; max-width: 500px; padding: 30px; border: 1px solid #ddd; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); transition: all 1s ease; }
+        .psychopath-mode { background-color: #000; color: #f00; border: 2px solid #500; }
+        h2 { font-size: 1.2rem; line-height: 1.5; margin-bottom: 20px; }
+        .option-label { display: block; padding: 10px; margin: 10px 0; border: 1px solid #ccc; cursor: pointer; }
+        button { width: 100%; padding: 12px; background-color: #333; color: #fff; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container" id="app">
+    <h2 id="question">載入中...</h2>
+    <div id="options"></div>
+    <button onclick="checkAnswer()">下一題</button>
+</div>
+
+<script>
+    const quizData = [
+        {q: "1. 您通常在晚上幾點就寢？", o: ["10點前", "12點前", "熬夜到很晚"]},
+        {q: "2. 學校下課時間，你通常喜歡跟同學做什麼？", o: ["聚在一起聊天、去合作社", "去操場走走", "留在教室休息"]},
+        {q: "3. 週末喜歡待在哪裡？", o: ["在家", "圖書館", "外面逛街"]},
+        {q: "4. 你覺得朋友間最重要的特質是什麼？", o: ["誠實", "幽默", "陪伴"]},
+        {q: "5. 你有特別喜歡的顏色嗎？", o: ["有", "沒有"]},
+        {q: "6. 如果在意一個人，你會注意他的上線時間嗎？", o: ["偶爾會", "不會"]},
+        {q: "7. 看到在意的人跟異性聊天，心裡會稍微有點不舒服嗎？", o: ["會一點點", "不會"]},
+        {q: "8. 為了確認對方安全，調查一下他身邊的人，也是一種關心吧？", o: ["感覺有點怪", "可以接受"]},
+        {q: "9. 盯著一個人的生活細節，其實是一種表達愛的方式，對吧？", o: ["是", "不一定"]},
+        {q: "10. 如果對方眼中只有我，那該有多好呢？", o: ["我也這麼想"]},
+        {q: "11. 我知道妳在哪、穿什麼、想什麼。這樣還不夠嗎？", o: ["..."]},
+        {q: "12. 妳不需要別人了，只要看著我就好了，不是嗎？", o: ["好"]},
+        {q: "13. 誰都不能帶走妳。誰、都、不、能。", o: ["好"]},
+        {q: "14. 蘇芝瑩，這份問卷其實只有妳一個人能看到。", o: ["..."]},
+        {q: "15. 永遠跟我在一起，這是約定好的，對吧？", o: ["我願意。"]}
+    ];
+
+    let i = 0;
+    function render() {
+        if(i >= 8) document.getElementById("app").className = "quiz-container psychopath-mode";
+        document.getElementById("question").innerText = quizData[i].q;
+        let html = "";
+        quizData[i].o.forEach(o => html += `<label class="option-label"><input type="radio" name="ans" value="${o}"> ${o}</label>`);
+        document.getElementById("options").innerHTML = html;
+    }
+    function checkAnswer() {
+        if(!document.querySelector('input[name="ans"]:checked')) return alert("請作答。");
+        i++;
+        if(i < quizData.length) render();
+        else document.getElementById("app").innerHTML = "<h2>契約已成。妳逃不掉了。</h2>";
+    }
+    render();
+</script>
+</body>
+</html>
