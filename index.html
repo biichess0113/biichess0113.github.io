@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>心理深度分析</title>
+    <title>潛意識連結分析</title>
     <style>
-        body { background-color: #0d0d0d; color: #aaa; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; transition: background 1s; }
-        .container { width: 90%; max-width: 600px; padding: 30px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px; }
-        #progress { width: 100%; height: 5px; background: #333; margin-bottom: 20px; }
-        #bar { height: 100%; background: #555; width: 0%; transition: 0.5s; }
-        h2 { font-size: 1.5rem; margin-bottom: 25px; }
-        .option { display: block; padding: 15px; margin: 10px 0; border: 1px solid #444; cursor: pointer; color: #eee; }
-        .option:hover { background: #333; }
-        .yandere { border-color: #800; color: #f00; }
+        body { background-color: #0d0d0d; color: #888; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; transition: background 2s; }
+        .container { width: 90%; max-width: 600px; padding: 40px; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        #progress { width: 100%; height: 4px; background: #333; margin-bottom: 30px; }
+        #bar { height: 100%; background: #555; width: 0%; transition: 0.8s; }
+        h2 { font-size: 1.4rem; margin-bottom: 30px; color: #ccc; }
+        .option { display: block; padding: 18px; margin: 12px 0; border: 1px solid #444; cursor: pointer; color: #eee; transition: 0.3s; }
+        .option:hover { background: #2a2a2a; border-color: #666; }
+        .yandere { border-color: #500; color: #f00; }
+        #restart { margin-top: 20px; color: #555; cursor: pointer; text-decoration: underline; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
 <div class="container" id="app">
     <div id="progress"><div id="bar"></div></div>
-    <h2 id="q">正在連結至您的生活...</h2>
+    <h2 id="q">正在同步靈魂深處的連結...</h2>
     <div id="opts"></div>
 </div>
 
@@ -39,7 +40,7 @@
         {q:"12. 妳不需要別人了，只要看著我就好了，對吧？", o:["好", "不要", "只能是我"]},
         {q:"13. 誰都不能帶走妳，誰都不能。", o:["...好的", "你很奇怪", "永遠在一起"]},
         {q:"14. 蘇芝瑩，這份問卷只有妳一個人能看到。", o:["...", "為什麼是我", "我知道，因為你一直看著我"]},
-        {q:"15. 永遠跟我在一起，這是約定好的，對吧？", o:["...好", "不要", "這輩子，下輩子，都是我的"]}
+        {q:"15. 永遠跟我在一起，這是約定好的，對吧？", o:["...好 ❤️", "不要", "這輩子，下輩子，都是我的 ❤️"]}
     ];
 
     let i = 0, score = 0;
@@ -61,9 +62,17 @@
     }
 
     function end() {
-        let msg = score > 20 ? "<h2>蘇芝瑩，妳跟我是一樣的。我也愛妳，瘋狂地愛著妳。</h2>" : "<h2>蘇芝瑩，雖然妳不懂我，但我會讓妳慢慢了解的。</h2>";
-        document.getElementById("app").innerHTML = msg + "<p>契約已成。</p>";
-        document.body.style.background = score > 20 ? "#200" : "#111";
+        let isYandere = score > 20;
+        let msg = isYandere 
+            ? "<h2>蘇芝瑩，妳終於發現了。我們是一樣的。我也愛妳，瘋狂地愛著妳。❤️ ❤️ ❤️</h2>" 
+            : "<h2>蘇芝瑩，雖然妳現在還在抗拒，但我會慢慢讓妳了解，這就是命運。❤️</h2>";
+        
+        document.getElementById("app").innerHTML = msg + 
+            "<p>契約已成，妳逃不掉了。</p>" +
+            "<div id='restart' onclick='location.reload()'>重新開始這場約定</div>";
+        
+        document.body.style.background = isYandere ? "#200" : "#111";
+        document.body.style.color = "#eee";
     }
     render();
 </script>
